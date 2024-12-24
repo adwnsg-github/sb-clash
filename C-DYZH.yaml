@@ -1,0 +1,346 @@
+#甬哥Github项目  ：github.com/yonggekkk
+#甬哥Blogger博客 ：ygkkk.blogspot.com
+#甬哥YouTube频道 ：www.youtube.com/@ygkkk
+#====clash-meta精简配置文件模版（V23.10.25）=====
+#====参考自clash-meta官方文档：wiki.metacubex.one=====
+
+#（一区）=============================（clash配置）
+#dns可自行修改
+port: 7890
+allow-lan: true
+mode: rule
+log-level: info
+unified-delay: true
+global-client-fingerprint: chrome
+dns:
+  enable: true
+  listen: :53
+  ipv6: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  default-nameserver: 
+    - 223.5.5.5
+    - 8.8.8.8
+  nameserver:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+  fallback:
+    - https://1.0.0.1/dns-query
+    - tls://dns.google
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+    ipcidr:
+      - 240.0.0.0/4
+
+
+
+#（二区）==============================（代理协议）
+#当前12个协议节点配置模版，按需求修改，如某协议节点不用，则无需删除，确保三区代理分流中没有该name节点名称即可
+proxies:
+#==============================（vless-reality-vision节点）
+- name: vless-reality-vision-sb               #可自定义名称
+  type: vless
+  server: 158.180.94.228                           
+  port: 51797                                
+  uuid: 75addacd-61fb-4011-9112-fe753f5149a4   
+  network: tcp
+  udp: true
+  tls: true
+  flow: xtls-rprx-vision
+  servername: www.yahoo.com                 
+  reality-opts: 
+    public-key: 0Soh5Vs9mi4yOnY9F_xrkiGZY7fzbOjFMoPbb3zk-WA    
+    short-id: 154ab632                    
+  client-fingerprint: chrome                  
+
+#==============================（vless-reality-grpc节点）
+- name: vless-reality-grpc-arm                  #可自定义名称
+  type: vless
+  server: 138.2.121.125                               #解析的域名或IP
+  port: 14943                                   #自定义的端口
+  uuid: 269ece58-e6af-4e66-8580-db2c4b974c89    #自定义的uuid
+  network: grpc
+  tls: true
+  udp: true
+  flow:
+  client-fingerprint: chrome                    #自定义的浏览器指纹
+  servername: www.yahoo.com                     #自定义的第三方域名
+  grpc-opts:
+    grpc-service-name: "adwnsg"                  #" "内自定义的字符
+  reality-opts:
+    public-key: qf2pkbEoX_mCkIoWcjMuQaksGA7mk-lSbs_SkkJRMXM    #自定义的public-key
+    short-id: 614d1121                          #自定义的short-id
+
+#==============================（vless-xtls-rprx-vision节点）
+- name: vless-xtls-rprx-vision-arm              #可自定义名称
+  type: vless
+  server: arm.adwnsgdns.gq                      #解析的域名
+  port: 48927                                  #自定义的端口
+  uuid: d9bbded5-ca36-499a-dc62-f9731aefd072    #自定义的uuid
+  network: tcp
+  tls: true
+  udp: true
+  flow: xtls-rprx-vision
+  client-fingerprint: chrome
+
+#==============================（vless-ws-tls节点）
+- name: vless-ws-tls-cloudflare                           #可自定义名称
+  type: vless
+  server: vlesscloudflare.freedns.pp.ua                          #解析的域名或者优选域名IP
+  port: 8443                                      #自定义的端口
+  uuid: 99f0c325-8ef6-400e-a871-e92a928221bb       #自定义的uuid
+  udp: true
+  tls: true
+  network: ws
+  servername: vlesscloudflare.freedns.pp.ua                     #sni域名，与下面的host一致
+  ws-opts:
+    path: "/?ed=2048"                              #" "内自定义的path路径
+    headers:
+      Host: vlesscloudflare.freedns.pp.ua                       #host域名，与上面的servername一致
+
+
+#==============================（vmess-ws-tls节点）
+- name: vmess-ws-tls-arm                           #可自定义名称
+  type: vmess
+  server: arm.adwnsgdns.gq                          #解析的域名或者优选域名IP
+  port: 443                                      #自定义的端口
+  uuid: 61e852f6-578f-43fa-fea6-9b569fb6daa8       #自定义的uuid
+  alterId: 0
+  cipher: auto
+  udp: true
+  tls: true
+  network: ws
+  servername: arm.adwnsgdns.gq                     #sni域名，与下面的host一致
+  ws-opts:
+    path: "/?ed=2048"                              #自定义的path路径
+    headers:
+      Host: arm.adwnsgdns.gq                       #host域名，与上面的servername一致
+
+#==============================（vmess-ws-tls节点）
+- name: vmess-ws-tls-sb                           #可自定义名称
+  type: vmess
+  server: 158.180.94.228                        
+  port: 8880                                     
+  uuid: 75addacd-61fb-4011-9112-fe753f5149a4       
+  alterId: 0
+  cipher: auto
+  udp: true
+  tls: false
+  network: ws
+  servername: www.bing.com                    
+  ws-opts:
+    path: "75addacd-61fb-4011-9112-fe753f5149a4-vm"                             
+    headers:
+      Host: www.bing.com                   
+#==============================（vless-reality-vision节点）
+- name: vless-reality-vision-arm             #可自定义名称
+  type: vless
+  server: 138.2.121.125                           
+  port: 56805                                
+  uuid: c2368fc5-c1c6-48c0-bba5-fa01d3c7b65a   
+  network: tcp
+  udp: true
+  tls: true
+  flow: xtls-rprx-vision
+  servername: www.yahoo.com                 
+  reality-opts: 
+    public-key: -I3HQLhduZBwEtrcD5fxHAd3dMYJE8fq4bwMAMUL5VY    
+    short-id: 17dedc43                      
+  client-fingerprint: chrome 
+#==============================（vless-reality-vision节点）
+- name: vless-reality-vision-amd              #可自定义名称
+  type: vless
+  server: 138.2.117.193                           
+  port: 443                                
+  uuid: e0fb1523-015f-42da-815f-9227f0c6421b   
+  network: tcp
+  udp: true
+  tls: true
+  flow: xtls-rprx-vision
+  servername: www.amazon.com                 
+  reality-opts: 
+    public-key: PhV1HN2RpexbNx4GygV4a0AuiomAr5aaKSOie5c7UEI    
+    short-id: 88                      
+  client-fingerprint: chrome 
+      
+#==============================（vmess-ws-tls节点）
+- name: vmess-ws-tls-5he1                          #可自定义名称
+  type: vmess
+  server: 5he1.adwnsg.repl.co                          #解析的域名或者优选域名IP
+  port: 443                                      #自定义的端口
+  uuid: 48b68172-9f8c-4deb-9ca9-82e7f00a7387       #自定义的uuid
+  alterId: 0
+  cipher: auto
+  udp: true
+  tls: true
+  network: ws
+  servername: 5he1.adwnsg.repl.co                     #sni域名，与下面的host一致
+  ws-opts:
+    path: "/48b68172-9f8c-4deb-9ca9-82e7f00a7387-vm"                              #自定义的path路径
+    headers:
+      Host: 5he1.adwnsg.repl.co                       #host域名，与上面的servername一致
+
+#==============================（vmess-ws-tls节点）
+- name: vmess-ws-tls-5he2                               #可自定义名称
+  type: vmess
+  server: 5he2.wnsgad.repl.co                          #解析的域名或者优选域名IP
+  port: 443                                       #自定义的端口
+  uuid: 81e3a15d-c76e-48e3-b927-77765c15466e       #自定义的uuid
+  alterId: 0
+  cipher: auto
+  udp: true
+  tls: true
+  network: ws
+  servername: 5he2.wnsgad.repl.co                     #sni域名，与下面的host一致
+  ws-opts:
+    path: "/81e3a15d-c76e-48e3-b927-77765c15466e-vm"                              #" "内自定义的path路径
+    headers:
+      Host: 5he2.wnsgad.repl.co                       #host域名，与上面的servername一致
+
+#==============================（trojan-tcp-tls节点）
+- name: trojan-tcp-tls节点                         #可自定义名称
+  type: trojan
+  server: www.yahoo.com                          #解析的域名
+  port: 55152                                      #自定义的端口
+  password: 06WeUJEVXI                              #自定义的密码
+  client-fingerprint: chrome
+  udp: true
+  sni: www.yahoo.com                             #sni域名，与上面server地址一致
+  alpn:
+    - h2
+    - http/1.1
+  skip-cert-verify: false
+    
+#==============================（hysteria1证书节点）
+- name: hysteria1证书节点                            #可自定义名称
+  type: hysteria
+  server: yg.ygkkk.eu.org                          #解析的域名
+  port: 12345                                      #自定义的端口，多端口改为 ports:空格1000,2000-3000
+  auth-str: 123456                                 #自定义的密码
+  alpn:
+    - h3
+  protocol: udp                                    #自定义协议：udp/wechat-video/faketcp
+  up: 20                                           #自定义的上传限制
+  down: 100                                        #自定义的下载限制
+  sni: yg.ygkkk.eu.org                             #sni域名，与上面server地址一致  
+  skip-cert-verify: false
+  fast-open: true
+    
+#==============================（hysteria1自签节点）
+- name: hysteria1自签节点                           #可自定义名称
+  type: hysteria
+  server: 1.2.3.4                                  #服务器本地IP
+  port: 12345                                      #自定义的端口，多端口改为 ports:空格1000,2000-3000
+  auth-str: 123456                                 #自定义的密码
+  alpn:
+    - h3
+  protocol: udp                                    #自定义协议：udp/wechat-video/faketcp
+  up: 20                                           #自定义的上传限制
+  down: 100                                        #自定义的下载限制
+  sni: www.bing.com                                #自签证书                     
+  skip-cert-verify: true
+  fast-open: true
+
+#==============================（hysteria2证书节点）
+- name: hysteria2证书节点-sb                            #可自定义名称
+  type: hysteria2                                      
+  server: 158.180.94.228                               
+  port: 64737                                
+  password: 75addacd-61fb-4011-9112-fe753f5149a4                          
+  alpn:
+    - h3
+  sni: www.bing.com                               
+  skip-cert-verify: true
+  fast-open: true
+
+#==============================（hysteria2自签节点）
+- name: hysteria2自签节点                             #可自定义名称
+  type: hysteria2                                      
+  server: 1.2.3.4                                     #服务器本地IP
+  port: 12345                                         #自定义的端口
+  password: 123456                                    #自定义的密码
+  alpn:
+    - h3
+  sni: www.bing.com                                    #自签证书
+  skip-cert-verify: true
+  fast-open: true
+    
+#==============================（tuic-V5节点）
+- name: tuic-V5节点-sb                              #可自定义名称
+  server: sb.freedns.pp.ua
+  port: 39015
+  type: tuic
+  uuid: 6180648f-6a75-4957-b95b-021b50fe646e
+  password: 6180648f-6a75-4957-b95b-021b50fe646e
+  alpn: [h3]
+  disable-sni: true
+  reduce-rtt: true
+  udp-relay-mode: native
+  congestion-controller: bbr
+  sni: sb.freedns.pp.ua
+  skip-cert-verify: false
+
+#==============================（warp-wireguard节点）  
+- name: warp-wireguard节点                                   #可自定义名称
+  type: wireguard         
+  server: 162.159.193.10                                     #可自定义优选对端IP，与下面port的端口相对应
+  port: 2408                                                 #可自定义优选对端IP，与上面server的IP相对应
+  ip: 172.16.0.2
+  ipv6: 2606:4700:190:814e:7de3:5ddb:9d3e:9359               #与private-key相对应，如删除本行，表示仅IPV4
+  public-key: bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=
+  private-key: gK3C8ijdVlT7sd5fsdf5ssdfgsdfgsdfgobT2U+rgHo=  #获取private-key，私key
+  udp: true
+
+
+
+#（三区）==============================（代理分流）
+#分流组可自行创建添加，proxies参数下的name节点名称，按需求自行增减，确保出现的name节点名称在二区代理协议中可查找
+proxy-groups:
+- name: 负载均衡
+  type: load-balance
+  url: https://www.gstatic.com/generate_204
+  interval: 300
+  strategy: round-robin
+  proxies:
+    - vless-ws-tls-cloudflare
+ 
+    - vless-reality-vision-sb
+
+    - vless-reality-vision-amd 
+    
+
+- name: 自动选择
+  type: url-test
+  url: https://www.gstatic.com/generate_204
+  interval: 300
+  tolerance: 50
+  proxies:
+    - vless-ws-tls-cloudflare
+ 
+    - vless-reality-vision-sb
+
+    - vless-reality-vision-amd 
+    
+    
+- name: 🌍选择代理节点
+  type: select
+  proxies:
+    - 负载均衡                                            #自定义添加协议的name字段
+    - 自动选择
+    - DIRECT
+    - vless-ws-tls-cloudflare
+ 
+    - vless-reality-vision-sb
+
+    - vless-reality-vision-amd 
+    
+
+
+
+#（四区）==============================（代理规则）
+#代理规则可自行添加 
+rules:
+  - GEOIP,LAN,DIRECT
+  - GEOIP,CN,DIRECT
+  - MATCH,🌍选择代理节点
